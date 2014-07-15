@@ -1,6 +1,6 @@
 {
   "name": "angular-browser-cache-manager",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "main": "dist/scripts/angular-browser-cache-manager.js",
   "ignore": [
     "app",

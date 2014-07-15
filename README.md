@@ -1,7 +1,10 @@
-angular-browser-cache-manager
+angular-browser-cache-manager 
 =============================
 
 This is a module for AngularJS that provides the ability to have control over the browser cache XHR requests
+
+Build status: [![Build Status](https://travis-ci.org/ClouDesire/angular-browser-cache-manager.svg?branch=master)](https://travis-ci.org/ClouDesire/angular-browser-cache-manager)
+
 
 What does it do?
 ---------------

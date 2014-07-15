@@ -2,6 +2,17 @@
 
 angular
   .module('BrowserCache', [])
+  .provider('$browserCache', function() {
+    var __hashParameter = 'asd';
+    return {
+      setHashParameter: function(hashParameter) {
+        __hashParameter = hashParameter;
+      },
+      $get: function() {
+        return __hashParameter;
+      }
+    };
+  })
   .service('browserCacheManager', ['$cacheFactory', function ($cacheFactory) {
     var defaultHash = -1, cacheName = 'BrowserCache';
     var cleanURLParams = function (URL) {
@@ -31,8 +42,8 @@ angular
       }
     };
   }])
-  .factory('browserCacheInterceptor', ['$q', 'browserCacheManager', function ($q, browserCacheManager) {
-    var hashParameter = 'rev';
+  .factory('browserCacheInterceptor', ['$q', 'browserCacheManager', '$browserCache', function($q, browserCacheManager, $browserCache) {
+    var hashParameter = $browserCache;
     return {
       request: function (config) {
         // not retrieving a template .html
@@ -43,7 +54,7 @@ angular
             var someMilk = hashParameter + '=' + browserCacheManager.get(config.url);
             // append the hash parameter to URL
             config.url += (config.url.split('?')[1] ? '&' : '?') + someMilk;
-          } else if (config.method === 'POST' || config.method === 'PUT' || config.method === 'PATCH') {
+          } else if (config.method === 'POST' || config.method === 'PUT' || config.method === 'PATCH' || config.method === 'DELETE') {
             // on POST PUT PATCH change (decrement) the hash parameter
             browserCacheManager.invalidateResourceCache(config.url);
           }

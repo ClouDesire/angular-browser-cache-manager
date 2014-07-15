@@ -1,0 +1,25 @@
+{
+  "name": "angular-browser-cache-manager",
+  "version": "0.0.1",
+  "main": "dist/scripts/angular-browser-cache-manager.js",
+  "ignore": [
+    "app",
+    "test",
+    ".bowerrc",
+    ".gitignore",
+    ".jshintrc",
+    ".travis.yml",
+    "Gruntfile.js",
+    "bower.json",
+    "karma.conf.js",
+    "package.json",
+    "README",
+    "node_modules"
+  ],
+  "dependencies": {
+    "angular": "~1.2.6"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.6"
+  }
+}

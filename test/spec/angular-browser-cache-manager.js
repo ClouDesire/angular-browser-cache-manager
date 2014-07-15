@@ -18,4 +18,14 @@ describe('Module: BrowserCache', function () {
       expect(browserCacheManager.get('test/123?q=0978&p=123')).toBe(-2);
       expect(browserCacheManager.get('test/456')).toBe(-1);
     }]));
+
+  it('should have a working browserCacheManager',
+    inject(['browserCacheInterceptor', function(browserCacheInterceptor) {
+      expect(browserCacheInterceptor.request({url: '/test/1', method: 'GET'}).url).toBe('/test/1?rev=-1');
+      expect(browserCacheInterceptor.request({url: '/test/1', method: 'POST'}).url).toBe('/test/1');
+      expect(browserCacheInterceptor.request({url: '/test/1', method: 'GET'}).url).toBe('/test/1?rev=-2');
+      expect(browserCacheInterceptor.request({url: '/test/1', method: 'GET'}).url).toBe('/test/1?rev=-2');
+      expect(browserCacheInterceptor.request({url: '/test/1', method: 'DELETE'}).url).toBe('/test/1');
+      expect(browserCacheInterceptor.request({url: '/test/1', method: 'GET'}).url).toBe('/test/1?rev=-3');
+    }]));
 });

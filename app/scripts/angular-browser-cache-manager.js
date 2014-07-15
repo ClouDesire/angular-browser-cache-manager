@@ -3,7 +3,7 @@
 angular
   .module('BrowserCache', [])
   .provider('$browserCache', function() {
-    var __hashParameter = 'asd';
+    var __hashParameter = 'rev';
     return {
       setHashParameter: function(hashParameter) {
         __hashParameter = hashParameter;

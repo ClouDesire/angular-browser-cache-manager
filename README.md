@@ -49,8 +49,8 @@ myApplication
   .config(function($stateProvider, $urlRouterProvider, $browserCacheProvider) {
     $browserCacheProvider.setHashParameter('manuel');
     // first argument is the request url, the second argument is the url that will be invalidate
-    browserCacheProvider.addCustomCacheRule(/user/, /statistics/);
-    browserCacheProvider.addCustomCacheRule(/order/, /anotherURLPattern/);
+    $browserCacheProvider.addCustomCacheRule(/user/, /statistics/);
+    $browserCacheProvider.addCustomCacheRule(/order/, /anotherURLPattern/);
   });
 ```
 

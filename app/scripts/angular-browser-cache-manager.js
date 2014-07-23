@@ -1,20 +1,35 @@
 'use strict';
 
 angular
-  .module('BrowserCache', [])
+  .module('BrowserCache', ['angular-data.DSCacheFactory'])
   .provider('$browserCache', function() {
     var __hashParameter = 'rev';
+    var __customCacheMap = [];
+    var obj = {
+      hashParameter: __hashParameter,
+      customCacheMap: __customCacheMap
+    };
     return {
       setHashParameter: function(hashParameter) {
         __hashParameter = hashParameter;
       },
+      addCustomCacheRule: function(requestPattern, destinationPattern) {
+        if(!requestPattern instanceof RegExp || !destinationPattern instanceof RegExp) {
+          throw new SyntaxError('addCustomCacheRule arguments must be an instance of RexExp');
+        }
+        __customCacheMap.push({'requestPattern': requestPattern, 'destinationPattern': destinationPattern});
+      },
+      cleanCustomCacheRules: function() {
+        __customCacheMap = [];
+      },
       $get: function() {
-        return __hashParameter;
+        return obj;
       }
     };
   })
-  .service('browserCacheManager', ['$cacheFactory', function ($cacheFactory) {
+  .service('browserCacheManager', ['DSCacheFactory', '$browserCache', function (DSCacheFactory, $browserCache) {
     var defaultHash = -1, cacheName = 'BrowserCache';
+    var customCacheMap = $browserCache.customCacheMap;
     var cleanURLParams = function (URL) {
       var newURL = URL, oldURL = URL, index = oldURL.indexOf('?');
       if (index === -1) {
@@ -26,7 +41,7 @@ angular
       return newURL;
     };
     // get cacheFactory service
-    this.__cacheFactory = this.__cacheFactory || $cacheFactory(cacheName);
+    this.__cacheFactory = this.__cacheFactory || new DSCacheFactory(cacheName);
     this.get = function (specialKey) {
       specialKey = cleanURLParams(specialKey);
       // retrieve the hash parameter value from cache or initialize it
@@ -40,10 +55,24 @@ angular
         // decrement hash value so the next GET on specialKey resource will not returns the cached one
         this.__cacheFactory.put(specialKey, Number(hash) - 1);
       }
+      // custom cache rules
+      for(var i = 0, l = customCacheMap.length; i < l; i++) {
+        if(customCacheMap[i].requestPattern.test(specialKey)) {
+          var cacheKeys = this.__cacheFactory.keys();
+          for(var e = 0, k = cacheKeys.length; e < k; e++) {
+            if(customCacheMap[i].destinationPattern.test(cacheKeys[e])) {
+              hash = this.__cacheFactory.get(cacheKeys[e]);
+              if(hash) {
+                this.__cacheFactory.put(cacheKeys[e], Number(hash) - 1);
+              }
+            }
+          }
+        }
+      }
     };
   }])
   .factory('browserCacheInterceptor', ['$q', 'browserCacheManager', '$browserCache', function($q, browserCacheManager, $browserCache) {
-    var hashParameter = $browserCache;
+    var hashParameter = $browserCache.hashParameter;
     return {
       request: function (config) {
         // not retrieving a template .html

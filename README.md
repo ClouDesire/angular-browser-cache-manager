@@ -1,4 +1,4 @@
-angular-browser-cache-manager 
+angular-browser-cache-manager
 =============================
 
 This is a module for AngularJS that provides the ability to have control over the browser cache XHR requests
@@ -38,13 +38,37 @@ Note that the last GET have the same rev parameter of the previous GET request.
 Note that the rev value depends ONLY on the URL value (/users in the above example) and ignore any query parameters (like myParameter in the above example).
 
 
+
+Custom Cache Rules
+---------------
+If you want to invalidate the cache of a different URL you can define your custom RegExp rules.
+
+
+```
+myApplication
+  .config(function($stateProvider, $urlRouterProvider, $browserCacheProvider) {
+    $browserCacheProvider.setHashParameter('manuel');
+    // first argument is the request url, the second argument is the url that will be invalidate
+    browserCacheProvider.addCustomCacheRule(/user/, /statistics/);
+    browserCacheProvider.addCustomCacheRule(/order/, /anotherURLPattern/);
+  });
+```
+
+- GET on `/statistics` will be intercepted and trasformed into GET on `/statistics?rev=-1`
+- GET on `/user/1` will be intercepted and trasformed into GET on `/user/1?rev=-1`
+- POST on `/user/1`
+- GET on `/user/1` will be intercepted and trasformed into GET on `/user/1?rev=-2`
+- **GET on `/statistics` will be intercepted and trasformed into GET on `/statistics?rev=-2`**
+
+
+
 How to install:
 ---------------
 
  * Install it with Bower via `bower install angular-browser-cache-manager --save`
 
  * Ensure that your application module specifies `BrowserCache` as a dependency: `angular.module('myApplication', ['BrowserCache'])`
- 
+
  * Push the `browserCacheInterceptor` interceptor to the $http interceptors lists
 
 ```

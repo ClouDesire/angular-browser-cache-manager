@@ -1,6 +1,6 @@
 {
   "name": "angular-browser-cache-manager",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/scripts/angular-browser-cache-manager.js",
   "ignore": [
     "app",
@@ -17,7 +17,8 @@
     "node_modules"
   ],
   "dependencies": {
-    "angular": "~1.2.6"
+    "angular": "~1.2.6",
+    "angular-cache": "~3.1.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.6"

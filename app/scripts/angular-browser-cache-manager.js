@@ -41,7 +41,7 @@ angular
       return newURL;
     };
     // get cacheFactory service
-    this.__cacheFactory = this.__cacheFactory || new DSCacheFactory(cacheName);
+    this.__cacheFactory = this.__cacheFactory || new DSCacheFactory(cacheName, {storageMode: 'localStorage'});
     this.get = function (specialKey) {
       specialKey = cleanURLParams(specialKey);
       // retrieve the hash parameter value from cache or initialize it

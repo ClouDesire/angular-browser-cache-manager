@@ -3,24 +3,22 @@
 angular
   .module('BrowserCache', ['angular-data.DSCacheFactory'])
   .provider('$browserCache', function() {
-    var __hashParameter = 'rev';
-    var __customCacheMap = [];
     var obj = {
-      hashParameter: __hashParameter,
-      customCacheMap: __customCacheMap
+      hashParameter: 'rev',
+      customCacheMap: []
     };
     return {
       setHashParameter: function(hashParameter) {
-        __hashParameter = hashParameter;
+        obj.hashParameter = hashParameter;
       },
       addCustomCacheRule: function(requestPattern, destinationPattern) {
         if(!requestPattern instanceof RegExp || !destinationPattern instanceof RegExp) {
           throw new SyntaxError('addCustomCacheRule arguments must be an instance of RexExp');
         }
-        __customCacheMap.push({'requestPattern': requestPattern, 'destinationPattern': destinationPattern});
+        obj.customCacheMap.push({'requestPattern': requestPattern, 'destinationPattern': destinationPattern});
       },
       cleanCustomCacheRules: function() {
-        __customCacheMap = [];
+        obj.customCacheMap = [];
       },
       $get: function() {
         return obj;

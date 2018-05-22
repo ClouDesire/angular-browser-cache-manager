@@ -74,7 +74,7 @@ angular
     return {
       request: function (config) {
         // not retrieving a template .html
-        if (config.url.indexOf('.html') === -1) {
+        if (config.url.indexOf('.html') === -1 && config.url.indexOf('.svg') === -1) {
           // append the cache parameter to the request
           if (config.method === 'GET') {
             // create 'foo=bar'
